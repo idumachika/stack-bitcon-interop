@@ -41,3 +41,15 @@
         (map-set asset-locks {owner: tx-sender} {amount: amount, locked: true})
         (ok amount)))
 
+;; Unlock SIP Tokens using Bitcoin SPV Proof
+(define-public (unlock-assets (proof (buff 64)))
+    (let ((locked-data (map-get? asset-locks {owner: tx-sender})))
+        (match locked-data 
+            lock-info
+            (begin
+                (asserts! (get locked lock-info) (err "No locked assets"))
+                (asserts! (verify-proof proof) (err "Invalid Bitcoin proof"))
+                (map-set asset-locks {owner: tx-sender} (merge lock-info {locked: false}))
+                (ok (get amount lock-info)))
+            (err "No locked assets"))))
+
