@@ -61,7 +61,7 @@
         (ok true)))
 
 
-        ;; Get Message Details
+;; Get Message Details
 (define-read-only (get-message (msg-id uint))
     (map-get? messages {message-id: msg-id}))
 
