@@ -33,3 +33,11 @@
                 (ok true))
             (err "Message not found"))))
 
+;; Lock SIP Tokens for Cross-Chain Transfer
+(define-public (lock-assets (amount uint))
+    (begin
+        (asserts! (> amount 0) (err "Invalid amount"))
+        (asserts! (is-none (map-get? asset-locks {owner: tx-sender})) (err "Assets already locked"))
+        (map-set asset-locks {owner: tx-sender} {amount: amount, locked: true})
+        (ok amount)))
+
