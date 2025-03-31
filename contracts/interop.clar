@@ -21,3 +21,15 @@
             (var-set message-counter (+ msg-id 1))
             (ok msg-id))))
 
+;; Confirm Message via Cryptographic Proof
+(define-public (confirm-message (msg-id uint) (proof (buff 64)))
+    (let ((msg (map-get? messages {message-id: msg-id})))
+        (match msg 
+            msg-data
+            (begin
+                (asserts! (not (get confirmed msg-data)) (err "Already confirmed"))
+                (asserts! (verify-proof proof) (err "Invalid proof"))
+                (map-set messages {message-id: msg-id} (merge msg-data {confirmed: true}))
+                (ok true))
+            (err "Message not found"))))
+
