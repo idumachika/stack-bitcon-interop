@@ -53,3 +53,10 @@
                 (ok (get amount lock-info)))
             (err "No locked assets"))))
 
+;; Store Bitcoin Block Headers for Finality Verification
+(define-public (submit-btc-header (height uint) (hash (buff 32)))
+    (begin
+        (asserts! (is-none (map-get? bitcoin-headers {height: height})) (err "Header already exists"))
+        (map-set bitcoin-headers {height: height} {hash: hash})
+        (ok true)))
+
