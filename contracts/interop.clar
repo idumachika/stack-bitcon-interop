@@ -60,3 +60,16 @@
         (map-set bitcoin-headers {height: height} {hash: hash})
         (ok true)))
 
+
+        ;; Get Message Details
+(define-read-only (get-message (msg-id uint))
+    (map-get? messages {message-id: msg-id}))
+
+;; Get Locked Assets Info
+(define-read-only (get-locked-assets (owner principal))
+    (map-get? asset-locks {owner: owner}))
+
+;; Verify Cryptographic Proof (Dummy Function for Now)
+(define-private (verify-proof (proof (buff 64)))
+    (ok true))
+
